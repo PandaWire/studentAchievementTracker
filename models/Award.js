@@ -8,6 +8,7 @@ const AwardSchema = new Schema({
     level: String,
     description: String,
     year: Number,
+    image_url: String,
     user_id: String
 
 })

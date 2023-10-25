@@ -118,6 +118,8 @@ router.get("/get/SAT/superscore/:user_id", async (req, res) => {
 router.get("/fetch/user/profile/:user_id", async (req, res) => {
     try{
         const userID = req.params.user_id;
+        const user = await User.find({_id: userID});
+        const userName = user.name;
         const actTests = await ACT.find({user_id: userID});
         const satTests = await SAT.find({user_id: userID});
         const APIB_Tests = await Student_APIB_Test.find({user_id: userID});
@@ -125,8 +127,11 @@ router.get("/fetch/user/profile/:user_id", async (req, res) => {
         const colleges = await College.find({user_id: userID});
         const studentECs = await Student_extracurricular.find({user_id: userID});
 
+        console.log(userName);
+
         const userProfile = 
             {
+                "Name": userName,
                 "ACTs": actTests,
                 "SATs": satTests,
                 "APs and IBs": APIB_Tests,
@@ -135,7 +140,8 @@ router.get("/fetch/user/profile/:user_id", async (req, res) => {
                 "Extracurriculars": studentECs
             };
 
-        return res.status(200).send(encryptData(JSON.stringify(userProfile)));
+        return res.status(200).send(userProfile);
+        // return res.status(200).send(encryptData(JSON.stringify(userProfile)));
     }
     catch(error){
         handleError(error, res);
@@ -191,7 +197,7 @@ router.get("/fetch/top/five/liked/extracurriculars", async (req, res) => {
         //     limit: 5
         // }
 
-        const topFiveExtracurriculars = await Extracurricular.find().sort({likes: -1}).limit(5);
+        const topFiveExtracurriculars = await Extracurricular.find().sort({likes: -1}).limit(6);
 
         // console.log(JSON.stringify(topFiveExtracurriculars));
         if (topFiveExtracurriculars.length === 0) {
@@ -235,7 +241,7 @@ router.get("/fetch/top/five/common/extracurriculars", async (req, res) => {
       listOfKeys.sort((a, b) => extracurriculars[b] - extracurriculars[a]);
   
       
-      const topFiveActivitiesStrings = listOfKeys.slice(0, 5);
+      const topFiveActivitiesStrings = listOfKeys.slice(0, 6);
   
       
       const topFiveActivities = topFiveActivitiesStrings.map(id => new ObjectID(id));
@@ -274,7 +280,7 @@ router.get("/fetch/top/five/accepted/colleges", async (req, res) => {
         const listOfKeys = Object.keys(acceptedCount);
         listOfKeys.sort((a, b) => acceptedCount[b] - acceptedCount[a]);
 
-        const topFiveCollegesStrings = listOfKeys.slice(0, 5);
+        const topFiveCollegesStrings = listOfKeys.slice(0, 6);
 
         const topFiveColleges = topFiveCollegesStrings.map(id => new ObjectID(id));
 

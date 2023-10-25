@@ -7,7 +7,8 @@ const Student_APIB_testSchema = new Schema({
     date: String,
     score: Number,
     user_id: String,
-    testId: String
+    testId: String,
+    image_url: String
 })
 
 module.exports = mongoose.model('Student_APIB_test', Student_APIB_testSchema);

@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const CollegeSchema = new Schema({
     name: String,
     description: String,
+    image_url: String
 
 })
 
